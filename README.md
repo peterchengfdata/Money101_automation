@@ -1,6 +1,7 @@
 # Python 環境設定教學
 
 ## 安裝 Python
+0. 影片參考：[Python 程式下載](https://youtu.be/wqRlKVRUV_k?si=EJHR9Ga1567svQdA)。 看第一集就好
 
 1. 開啟瀏覽器，前往 [Python 官方下載頁面](https://www.python.org/downloads/)。
 
