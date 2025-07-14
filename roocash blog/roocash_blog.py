@@ -457,9 +457,31 @@ def main():
         "https://roo.cash/blog/category/roo-life-discount/",
     ]
 
-    # 初始化 WebDriver
-    service = Service(ChromeDriverManager().install())
-    driver = webdriver.Chrome(service=service)
+    
+    try:
+        # 設定 Chrome 選項
+        chrome_options = webdriver.ChromeOptions()
+        chrome_options.add_argument("--no-sandbox")
+        chrome_options.add_argument("--disable-dev-shm-usage")
+        chrome_options.add_argument("--disable-gpu")
+        chrome_options.add_argument("--window-size=1920,1080")
+        
+        # 嘗試自動安裝 ChromeDriver
+        try:
+            service = Service(ChromeDriverManager().install())
+            driver = webdriver.Chrome(service=service, options=chrome_options)
+            print("成功使用 ChromeDriverManager 初始化 WebDriver")
+        except Exception as e:
+            print(f"ChromeDriverManager 初始化失敗: {e}")
+            print("嘗試使用系統預設 Chrome 瀏覽器...")
+            # 如果自動安裝失敗，嘗試使用系統預設 Chrome
+            driver = webdriver.Chrome(options=chrome_options)
+            print("成功使用系統預設 Chrome 初始化 WebDriver")
+            
+    except Exception as e:
+        print(f"WebDriver 初始化失敗: {e}")
+        print("請確保已安裝 Chrome 瀏覽器，並檢查系統相容性")
+        return
 
     all_articles = []
 
@@ -476,7 +498,9 @@ def main():
 
             # 每個分類完成後保存一次，以防萬一
             df_temp = pd.DataFrame(all_articles)
-            temp_file = os.path.join(output_dir, f"roocash_all_articles_temp.csv")
+            temp_file = os.path.join(
+                output_dir, "roocash_all_articles_temp.csv"
+            )
             df_temp.to_csv(temp_file, index=False, encoding="utf-8-sig")
             print(f"已臨時保存 {len(all_articles)} 篇文章連結")
 
@@ -487,10 +511,12 @@ def main():
         print(f"成功獲取總共 {len(all_articles)} 篇文章，已儲存至 {articles_file}")
 
         # 爬取文章詳情，將 driver 作為參數傳入
+        print("\n====== 開始爬取文章詳細內容 ======")
         article_details = scrape_article_details(driver, all_articles)
 
         print("爬蟲完成！")
         print(f"總共爬取了 {len(all_articles)} 篇文章")
+        print(f"成功獲取了 {len(article_details)} 篇文章的詳細內容")
         print(f"數據已儲存到目錄: {output_dir}")
 
     finally:

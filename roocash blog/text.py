@@ -247,7 +247,7 @@ class ArticleAnalyzer:
 
 def main():
     # 使用方式
-    data_dir = "/Users/heng/Documents/money101_automation/roocash_data"
+    data_dir = "../money101_cal/roocash_data"
     
     analyzer = ArticleAnalyzer(data_dir)
     
