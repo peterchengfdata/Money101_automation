@@ -456,32 +456,13 @@ def main():
         "https://roo.cash/blog/category/roo-news/",
         "https://roo.cash/blog/category/roo-life-discount/",
     ]
+    # 初始化 WebDriver
+    # macOS 版本
+    service = Service(ChromeDriverManager().install())
+    # win --version
+    #service = Service(executable_path="chromedriver.exe")
+    driver = webdriver.Chrome(service=service)
 
-    
-    try:
-        # 設定 Chrome 選項
-        chrome_options = webdriver.ChromeOptions()
-        chrome_options.add_argument("--no-sandbox")
-        chrome_options.add_argument("--disable-dev-shm-usage")
-        chrome_options.add_argument("--disable-gpu")
-        chrome_options.add_argument("--window-size=1920,1080")
-        
-        # 嘗試自動安裝 ChromeDriver
-        try:
-            service = Service(ChromeDriverManager().install())
-            driver = webdriver.Chrome(service=service, options=chrome_options)
-            print("成功使用 ChromeDriverManager 初始化 WebDriver")
-        except Exception as e:
-            print(f"ChromeDriverManager 初始化失敗: {e}")
-            print("嘗試使用系統預設 Chrome 瀏覽器...")
-            # 如果自動安裝失敗，嘗試使用系統預設 Chrome
-            driver = webdriver.Chrome(options=chrome_options)
-            print("成功使用系統預設 Chrome 初始化 WebDriver")
-            
-    except Exception as e:
-        print(f"WebDriver 初始化失敗: {e}")
-        print("請確保已安裝 Chrome 瀏覽器，並檢查系統相容性")
-        return
 
     all_articles = []
 
